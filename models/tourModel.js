@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { default: slugify } = require('slugify');
 const validator = require("validator");
-const User = require('./userModel');
+// const User = require('./userModel');
 
 const tourSchema = new mongoose.Schema({
     name: {
@@ -86,7 +86,11 @@ const tourSchema = new mongoose.Schema({
         description: String,
         day: Number
     }],
-    guides: Array
+    // We reference users by their ID directly from the User document, it also saves us trouble in case some user info gets changed.
+    guides: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+    }]
 }, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
@@ -121,15 +125,16 @@ tourSchema.pre(/^find/, function(next) {
 
 
 //pre db save middleware that takes the IDs from body, queries for a match in DB and returns the promise to 'guidesPromises' array
-tourSchema.pre('save', async function(next) {
 
-    const guidesPromises = this.guides.map(async id =>
-        await User.findById({ _id: id })
-    );
-    //resolving all promises at once and saving it to the array
-    this.guides = await Promise.all(guidesPromises);
-    next();
-});
+// tourSchema.pre('save', async function(next) {
+
+//     const guidesPromises = this.guides.map(async id =>
+//         await User.findById({ _id: id })
+//     );
+//     //resolving all promises at once and saving it to the array
+//     this.guides = await Promise.all(guidesPromises);
+//     next();
+// });
 
 tourSchema.post(/^find/, function(docs, next) {
     console.log(`This query took ${Date.now() - this.start} milliseconds`);
