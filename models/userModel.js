@@ -61,6 +61,7 @@ userSchema.pre('save', async function(next) {
     next();
 });
 
+//Pre-save middleware that checks if password has been modified, and if so, adds a date timestamp.
 userSchema.pre('save', function(next) {
     if (!this.isModified('password') || this.isNew) {
         return next();
@@ -70,18 +71,20 @@ userSchema.pre('save', function(next) {
     next();
 });
 
+//User pre middleware to find only the users with 'active' status different than 'false'.
 userSchema.pre(/^find/, function(next) {
     this.find({ active: { $ne: false } }); //this points to the current query
 
     next();
 })
 
-
+// Method for user's password comparison.
 userSchema.methods.correctPassword = async function(candidatePass, userPass) {
     return await bcrypt.compare(candidatePass, userPass);
 
 }
 
+//This method checks if the password has been changed after issuing the token by passing token timestamp
 userSchema.methods.changedPassword = function(JWTTimestamp) {
     if (this.passwordChangedAt) {
         const changedTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
@@ -93,7 +96,7 @@ userSchema.methods.changedPassword = function(JWTTimestamp) {
     return false;
 }
 
-
+// Method for creating a password reset token with the expiration time of 10 minutes
 userSchema.methods.createPasswordResetToken = function() {
 
     const resetToken = crypto.randomBytes(32).toString('hex');
