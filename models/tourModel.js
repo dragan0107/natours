@@ -118,10 +118,23 @@ tourSchema.virtual("durationInWeeks").get(function() {
 //Pre and post FIND middlewares
 
 tourSchema.pre(/^find/, function(next) {
+
+    //this middleware populates the 'guides' property with any 'find' query, and excludes __v and passwordChangedAt info
+    this.populate({
+        path: 'guides',
+        select: '-__v -passwordChangedAt'
+    });
+
+    next();
+});
+
+
+tourSchema.pre(/^find/, function(next) {
     // this.find({ secretTour: true })
     this.start = Date.now();
     next();
 });
+
 
 
 //pre db save middleware that takes the IDs from body, queries for a match in DB and returns the promise to 'guidesPromises' array

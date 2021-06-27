@@ -2,6 +2,7 @@ const Tour = require("../models/tourModel");
 const APIFeatures = require("../utilities/apiFeatures");
 const catchAsync = require("../utilities/catchAsync");
 const AppError = require("../utilities/appError");
+const Review = require('../models/reviewModel');
 
 exports.aliasTopTours = (req, res, next) => {
     req.query.limit = "5";
@@ -41,10 +42,29 @@ exports.getAllTours = catchAsync(async(req, res, next) => {
 });
 
 
+exports.addReview = async(req, res, next) => {
+
+    const rev = await Review.create(req.body);
+
+
+    res.status(200).json({
+        data: rev
+    });
+}
+
+exports.getReviews = async(req, res, next) => {
+
+    const revs = await Review.find({});
+
+    res.status(200).json({
+        data: revs
+    });
+}
+
 
 exports.getTour = catchAsync(async(req, res, next) => {
 
-    const tour = await Tour.findById(req.params.id).populate('guides'); //we've added the .populate method to fill up the specific tour with the data from USER collection
+    const tour = await Tour.findById(req.params.id) //we've added the .populate method to fill up the specific tour with the data from USER collection
 
     if (!tour) {
         return next(new AppError("No tour found with that ID", 404));
