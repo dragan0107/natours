@@ -11,16 +11,6 @@ router.route("/tour-stats").get(getTourStats);
 
 router.route("/monthly-plan/:year").get(getMonthlyPlan);
 
-
-//TEST
-router.route('/review')
-    .post(protect, addReview)
-    .get(getReviews);
-
-
-//TEST
-
-
 router.route("/")
     .get(protect, getAllTours)
     .post(addTour);

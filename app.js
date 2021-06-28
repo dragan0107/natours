@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const tourRouter = require("./routes/tourRoutes");
 const userRouter = require("./routes/userRoutes");
+const reviewRouter = require('./routes/reviewRoutes');
 const AppError = require("./utilities/appError");
 const errorHandler = require("./controllers/errorController");
 const rateLimit = require('express-rate-limit');
@@ -53,6 +54,7 @@ app.use(express.static("./public"));
 
 app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users", userRouter);
+app.use('/api/v1/reviews', reviewRouter);
 console.log(process.env.NODE_ENV);
 
 

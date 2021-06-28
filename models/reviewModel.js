@@ -27,7 +27,7 @@ reviewSchema.pre(/^find/, function(next) {
 
     this.populate({
         path: 'tour',
-        select: 'name rating'
+        select: 'name rating -guides'
     }).populate('user');
 
     next();
