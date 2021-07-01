@@ -117,11 +117,12 @@ exports.protect = catchAsync(async(req, res, next) => {
     next();
 });
 
+//middleware where we pass the roles that are allowed to manipulate certain route..
 exports.restrictTo = (...roles) => {
 
     return (req, res, next) => {
 
-        console.log(req.user);
+        //if the logged in user doesn't have the roles we passed, he won't be authorized to do certain actions
         if (!roles.includes(req.user.role)) {
             return next(new AppError(`The user doesn't have permission to access this route`, 403));
         }

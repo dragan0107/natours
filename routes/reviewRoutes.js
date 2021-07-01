@@ -1,11 +1,11 @@
 const express = require("express");
 const { addReview, getAllReviews } = require('../controllers/reviewController');
-const { protect } = require('../controllers/authController');
+const { protect, restrictTo } = require('../controllers/authController');
 const router = express.Router();
 
 
 router.route('/')
-    .post(protect, addReview)
+    .post(protect, restrictTo('admin', 'user'), addReview)
     .get(protect, getAllReviews);
 
 
