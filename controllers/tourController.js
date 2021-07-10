@@ -44,7 +44,7 @@ exports.getAllTours = catchAsync(async(req, res, next) => {
 
 exports.getTour = catchAsync(async(req, res, next) => {
 
-    const tour = await Tour.findById(req.params.id) //we've added the .populate method to fill up the specific tour with the data from USER collection
+    const tour = await Tour.findById(req.params.id).populate('reviews'); //we've added the .populate method to fill up the specific tour with the reviews including info of user who posted.
 
     if (!tour) {
         return next(new AppError("No tour found with that ID", 404));

@@ -14,6 +14,7 @@ const reviewSchema = new mongoose.Schema({
             type: Date,
             default: Date.now
         },
+        //In the database, we will only persist tour and user IDs and virtually populate the model
         tour: {
             type: mongoose.Schema.ObjectId,
             ref: 'Tour',
@@ -36,11 +37,12 @@ reviewSchema.pre(/^find/, function(next) {
 
     //reminder that .populate still creates another query, which can affect the performance if app is bigger.
     this.populate({
-        path: 'tour',
-        select: 'name duration -_id -guides'
-    }).populate('user');
+        path: 'user',
+        select: 'role name'
+    });
 
     next();
+
 });
 
 const Review = mongoose.model('Review', reviewSchema);

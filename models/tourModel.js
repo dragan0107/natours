@@ -103,6 +103,15 @@ tourSchema.virtual("durationInWeeks").get(function() {
     return this.duration / 7
 });
 
+
+
+// Virtual property of reviews that will refer to Review model, and connect to it through foreign field 'tour' where the ID of the tour is stored, and local ID of the tour.
+tourSchema.virtual('reviews', {
+    ref: 'Review',
+    foreignField: 'tour',
+    localField: '_id'
+});
+
 //pre and post save doc middlewares
 
 // tourSchema.pre("save", function(next) {
