@@ -1,10 +1,12 @@
 const express = require("express");
 const { getAllTours, addTour, getTour, updateTour, deleteTour, aliasTopTours, getTourStats, getMonthlyPlan } = require("../controllers/tourController");
 const { protect, restrictTo } = require('../controllers/authController');
-const { getReviews, addReview } = require('../controllers/reviewController');
+const reviewRouter = require('./reviewRoutes');
 const router = express.Router();
 
 // router.param("id", checkID);
+
+router.use('/:tourId/reviews', reviewRouter); //attaching this review router to the tour router to this specific path
 
 router.route("/top-5-cheap").get(aliasTopTours, getAllTours);
 
@@ -21,9 +23,6 @@ router.route("/:id")
     .patch(updateTour)
     .delete(protect, restrictTo('admin', 'lead-guide'), deleteTour);
 
-router.route('/:tourId/reviews')
-    .get(protect, getReviews)
-    .post(protect, restrictTo('admin', 'user'), addReview);
 
 
 module.exports = router;
