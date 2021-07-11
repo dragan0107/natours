@@ -32,7 +32,7 @@ const reviewSchema = new mongoose.Schema({
         toObject: { virtuals: true }
     });
 
-//for any FIND method on review model, it will popuulate the tour with tour and user data.
+//for any FIND method on review model, it will popuulate the tour  user data while only keeping the user ID in the document.
 reviewSchema.pre(/^find/, function(next) {
 
     //reminder that .populate still creates another query, which can affect the performance if app is bigger.

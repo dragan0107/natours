@@ -4,6 +4,9 @@ const catchAsync = require('../utilities/catchAsync');
 //review adding function
 exports.addReview = catchAsync(async(req, res, next) => {
 
+    if (!req.body.tour) req.body.tour = req.params.tourId;
+    if (!req.body.user) req.body.user = req.user.id;
+
     const rev = await Review.create(req.body);
 
     //status 201 means CREATED
@@ -14,9 +17,11 @@ exports.addReview = catchAsync(async(req, res, next) => {
     });
 });
 
-exports.getAllReviews = catchAsync(async(req, res, next) => {
+exports.getReviews = catchAsync(async(req, res, next) => {
 
-    const revs = await Review.find({});
+    const tourID = req.params.tourId;
+
+    const revs = await Review.find({ tour: tourID });
 
     res.status(200).json({
         results: revs.length,

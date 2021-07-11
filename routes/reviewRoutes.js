@@ -4,9 +4,9 @@ const { protect, restrictTo } = require('../controllers/authController');
 const router = express.Router();
 
 
-router.route('/')
-    .post(protect, restrictTo('admin', 'user'), addReview)
-    .get(protect, getAllReviews);
+// router.route('/')
+//     .post(protect, restrictTo('admin', 'user'), addReview)
+//     .get(protect, getAllReviews);
 
 
 
